@@ -54,7 +54,7 @@ public class DBHandler {
     }
             
     public ArrayList<String> asignaturasAlumno(String name){
-        ResultSet rs= obj.getStatementDataSelect("select ag.nom from alumne al, tutoriaalumne ta, tutoria tt, assignatura ag where al.codi=ta.codiAlumne "
+        ResultSet rs= obj.getStatementDataSelect("select distinct ag.nom from alumne al, tutoriaalumne ta, tutoria tt, assignatura ag where al.codi=ta.codiAlumne "
                 + "and ta.codiTutoria=tt.codi and tt.codiAssignatura=ag.codi and al.nom='" + name+"'");
         ArrayList<String> asignaturas=new ArrayList<String>();
         try {

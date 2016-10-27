@@ -107,7 +107,25 @@ public class HelloWorld extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        DBHandler dbh= new DBHandler();
+         if(dbh.conexio()){
+            ArrayList<String> nombres= dbh.nombreAlumnos();
+            ArrayList<Alumne> lista= new ArrayList<Alumne>();
+            String name= (String) request.getParameter("select");
+            for(int i=0;i!=nombres.size();i++){
+                if(name.equals(nombres.get(i))){
+                Alumne al= new Alumne(name);
+                al.setTutorias(dbh.tutoriasAlumno(name));
+                al.setAsignaturas(dbh.asignaturasAlumno(name));
+                lista.add(al);
+                }
+            }
+            String json= gson.toJson(lista);
+            request.setAttribute("json", json);
+            response.setContentType("application/json");
+            RequestDispatcher a = request.getRequestDispatcher("hola.jsp");
+            a.forward(request, response);
+    }
     }
 
     /**
