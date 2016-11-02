@@ -107,19 +107,31 @@ public class HelloWorld extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        // Se crea una conexion con la base de datos
         DBHandler dbh= new DBHandler();
+        // Se comprueba que la conexion con la base de datos ha sido establecida antes de proceder
          if(dbh.conexio()){
+             // Se carga una lista con los nombres de los alumnos de la base de datos
             ArrayList<String> nombres= dbh.nombreAlumnos();
+            // Se crea una lista vacia para alumnos
             ArrayList<Alumne> lista= new ArrayList<Alumne>();
+            // Se obtiene el nombre del alumno del qual se quiere saber la informacion
             String name= (String) request.getParameter("select");
+            // Se recorre la lista de alumnos
             for(int i=0;i!=nombres.size();i++){
+                // Se comprueba si el nombre del alumno coincide con el nombre de la lista
                 if(name.equals(nombres.get(i))){
+                // Se crea un objeto alumno y se le asigna su nombre
                 Alumne al= new Alumne(name);
+                // Se carga la lista de tutorias en el objeto alumno desde la base de datos
                 al.setTutorias(dbh.tutoriasAlumno(name));
+                // Se carga la lista de asignaturas en el objeto alumno desde la base de datos
                 al.setAsignaturas(dbh.asignaturasAlumno(name));
+                // Se añade el objeto alumno a la lista de alumnos
                 lista.add(al);
                 }
             }
+            // Se crea un String el qual
             String json= gson.toJson(lista);
             request.setAttribute("json", json);
             response.setContentType("application/json");
